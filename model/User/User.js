@@ -1,110 +1,88 @@
 const { default: mongoose } = require("mongoose");
 
 const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-    },
-    gender: {
-      type: String,
-      required: true,
-      enum: ["male", "female", "prefer not to set"],
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    role: {
-      type: String,
-      required: true,
-      enum: ["user", "admin"],
-      default: "user",
-    },
-    lastLoggedIn: {
-      type: Date,
-      default: Date.now(),
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    AccountLevel: {
-      type: String,
-      required: true,
-      enum: ["bronze", "silver", "gold"],
-      default: "bronze",
-    },
-    profilePicture: {
-      type: String,
-      default: "",
-    },
-    coverImage: {
-      type: String,
-      default: "",
-    },
-    bio: {
-      type: String,
-    },
-    location: {
-      type: String,
-    },
-    notificationPreferences: {
-      email: {
-        type: String,
-        default: true,
+    {
+        username: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+          required: true,
+        },
+        role: {
+          type: String,
+          required: true,
+          enum: ["user", "admin"],
+          default: "user",
+        },
+        password: {
+          type: String,
+          required: true,
+        },
+        lastLogin: {
+          type: Date,
+          default: Date.now(),
+        },
+        isVerified: {
+          type: Boolean,
+          default: false,
+        },
+        accountLevel: {
+          type: String,
+          enum: ["bronze", "silver", "gold"],
+          default: "bronze",
+        },
+        profilePicture: {
+          type: String,
+          default: "",
+        },
+        coverImage: {
+          type: String,
+          default: "",
+        },
+        bio: {
+          type: String,
+        },
+        location: {
+          type: String,
+        },
+        notificationPreferences: {
+          email: { type: String, default: true },
+          //..other notifications (sms)
+        },
+        gender: {
+          type: String,
+          enum: ["male", "female", "prefer not to say", "non-binary"],
+        },
+        profileViewers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+        likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+        passwordResetToken: {
+          type: String,
+        },
+        passwordResetExpires: {
+          type: Date,
+        },
+        accountVerificationToken: {
+          type: String,
+        },
+        accountVerificationExpires: {
+          type: Date,
+        },
       },
-    },
-    profileViewers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    followers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    blockedUsers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    posts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
-    likedPosts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
-    passwordResetToken: {
-      type: String,
-    },
-    passwordResetExpire: {
-      type: Date,
-    },
-    accountVerificationToken: {
-      type: String,
-    },
-    accountVerificationExpires: {
-      type: Date,
-    },
-  },
-  {
-    timestamps: true,
-  }
+        timestamps: true,
+        toJSON: {
+          virtuals: true,
+        },
+        toObject: {
+          virtuals: true,
+        },
+      }
 );
 
 //compiling schema
