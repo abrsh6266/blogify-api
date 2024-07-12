@@ -68,7 +68,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
   );
   res.status(201).json({
     status: "success",
-    message: "Categoryies successfully deleted",
+    message: "Categoryies successfully updated",
     category,
   });
 });
