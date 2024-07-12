@@ -6,7 +6,7 @@ const Category = require("../../model/Category/Category");
 //@access Private
 
 exports.createCategory = asyncHandler(async (req, res) => {
-  const { name, author } = req.body;
+  const { name } = req.body;
   //! if exist
   const categoryFound = await Category.findOne({ name });
   if (categoryFound) {
@@ -14,7 +14,7 @@ exports.createCategory = asyncHandler(async (req, res) => {
   }
   const category = await Category.create({
     name: name,
-    author: req.userAuth?._id,
+    author: req.user?._id,
   });
   res.status(201).json({
     status: "success",

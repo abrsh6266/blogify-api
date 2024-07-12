@@ -3,6 +3,7 @@ const express = require("express");
 const usersRouter = require("./routes/users/usersRouter");
 const connectDB = require("./config/database");
 const { globalErrHandler, notFound } = require("./config/globalErrorHandler");
+const categoryRouter = require("./routes/categories/categoriesRoutes");
 
 //server
 const app = express();
@@ -15,6 +16,7 @@ connectDB();
 
 //Routes
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/categories",categoryRouter)
 
 //not found middleware(404)
 app.use(notFound);

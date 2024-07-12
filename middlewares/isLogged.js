@@ -12,12 +12,12 @@ const isLoggedIn = (req, res, next) => {
     const user = await User.findById(userId).select("_id username email role");
     req.user = user;
     if (err) {
-      return "Invalid Token";
+      const error = new Error("Expired/Invalid Token");
+      next(error);
     } else {
-        next()
+      next();
     }
   });
-  ;
 };
 
 module.exports = isLoggedIn;
