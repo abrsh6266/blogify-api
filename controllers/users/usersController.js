@@ -36,3 +36,34 @@ exports.register = async (req, res) => {
     });
   }
 };
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error("Invalid Login Credentials");
+    }
+
+    //compare password
+
+    const isMatch = await bcrypt.compare(password, user?.password);
+    if (!isMatch) {
+      throw new Error("Password doesn't match");
+    }
+
+    //update last login activity
+    user.lastLogin = new Date();
+
+    res.status(200).json({
+      status: "failed",
+      message: "logged in successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: error?.message,
+    });
+  }
+};
