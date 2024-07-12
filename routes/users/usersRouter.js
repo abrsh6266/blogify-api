@@ -10,6 +10,6 @@ const usersRouter = express.Router();
 
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
-usersRouter.get("/profile/:id", isLoggedIn, getProfile);
+usersRouter.get("/profile", isLoggedIn, getProfile);
 
 module.exports = usersRouter;

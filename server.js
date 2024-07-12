@@ -15,6 +15,18 @@ connectDB();
 //Routes
 app.use("/api/v1/users", usersRouter);
 
+//Error middlewares
+app.use((err, req, res, next) => {
+  const status = err?.status ? err?.status : "failed";
+  const message = err?.message;
+  const stack = err?.stack;
+
+  res.status(500).json({
+    status,
+    message,
+    stack,
+  });
+});
 const server = http.createServer(app);
 
 // Starting server
