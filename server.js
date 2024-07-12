@@ -15,6 +15,12 @@ connectDB();
 //Routes
 app.use("/api/v1/users", usersRouter);
 
+//not found middleware(404)
+app.use((req, res, next) => {
+  const err = new Error(`Connot find ${req.originalUrl} on the server`);
+  next(err);
+});
+
 //Error middlewares
 app.use((err, req, res, next) => {
   const status = err?.status ? err?.status : "failed";
