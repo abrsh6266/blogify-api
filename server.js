@@ -2,10 +2,7 @@ const http = require("http");
 const express = require("express");
 const usersRouter = require("./routes/users/usersRouter");
 const connectDB = require("./config/database");
-const {
-  notFoundHandler,
-  globalErroHandler,
-} = require("./config/globalErrorHandler");
+const { globalErrHandler, notFound } = require("./config/globalErrorHandler");
 
 //server
 const app = express();
@@ -20,10 +17,10 @@ connectDB();
 app.use("/api/v1/users", usersRouter);
 
 //not found middleware(404)
-app.use(notFoundHandler());
+app.use(notFound);
 
 //Error middlewares
-app.use(globalErroHandler);
+app.use(globalErrHandler);
 const server = http.createServer(app);
 
 // Starting server
