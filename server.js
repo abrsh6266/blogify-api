@@ -6,6 +6,9 @@ const connectDB = require("./config/database");
 //server
 const app = express();
 
+//middlewares
+app.use(express.json()); //pass incoming data
+
 //db connect
 connectDB();
 
