@@ -1,10 +1,9 @@
 const { default: mongoose } = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async () => {
   try {
-    const connected = mongoose.connect(
-      "mongodb+srv://Abrsh:abrsha159753@task-manager.yedy7op.mongodb.net/?retryWrites=true&w=majority&appName=Task-manager"
-    );
+    await mongoose.connect(process.env.DBCONNECTION);
     console.log("database has been connected");
   } catch (error) {
     console.log("Database connection failed", error.message);
