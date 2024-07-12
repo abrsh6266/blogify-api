@@ -1,12 +1,16 @@
 const http = require("http");
 const express = require("express");
 const usersRouter = require("./routes/users/usersRouter");
+const connectDB = require("./config/database");
 
 //server
 const app = express();
 
+//db connect
+connectDB();
+
 //Routes
-app.use('/',usersRouter)
+app.use("/", usersRouter);
 
 const server = http.createServer(app);
 
