@@ -32,60 +32,43 @@ exports.register = asyncHandler(async (req, res) => {
   });
 });
 
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      throw new Error("Invalid Login Credentials");
-    }
-
-    //compare password
-
-    const isMatch = await bcrypt.compare(password, user?.password);
-    if (!isMatch) {
-      throw new Error("Password doesn't match");
-    }
-
-    //update last login activity
-    user.lastLogin = new Date();
-
-    res.status(200).json({
-      status: "failed",
-      message: "logged in successfully",
-      user: {
-        id: user._id,
-        username: user.username,
-        email,
-        role: user.role,
-      },
-      token: generateToken(user),
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      message: error?.message,
-    });
+exports.login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error("Invalid Login Credentials");
   }
-};
 
-exports.getProfile = async (req, res, next) => {
-  //custom error
-  const err = new Error("my custom error");
-  return next(err);
-  try {
-    const id = req.user._id;
+  //compare password
 
-    const user = await User.findById(id);
-    res.status(200).json({
-      status: "success",
-      message: "profile fetched",
-      user,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: error?.message,
-    });
+  const isMatch = await bcrypt.compare(password, user?.password);
+  if (!isMatch) {
+    throw new Error("Password doesn't match");
   }
-};
+
+  //update last login activity
+  user.lastLogin = new Date();
+
+  res.status(200).json({
+    status: "failed",
+    message: "logged in successfully",
+    user: {
+      id: user._id,
+      username: user.username,
+      email,
+      role: user.role,
+    },
+    token: generateToken(user),
+  });
+});
+
+exports.getProfile = asyncHandler(async (req, res, next) => {
+  const id = req.user._id;
+
+  const user = await User.findById(id);
+  res.status(200).json({
+    status: "success",
+    message: "profile fetched",
+    user,
+  });
+});
