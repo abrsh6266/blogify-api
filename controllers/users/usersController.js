@@ -72,3 +72,36 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
     user,
   });
 });
+
+//block user
+
+exports.blockUser = asyncHandler(async (re1q, res) => {
+  const userIdToBlock = req.params.userIdToBlock;
+  const userBlocking = req.user?.id;
+
+  const userToBlock = await User.findById(userIdToBlock);
+  if (!userToBlock) {
+    throw new Error("User not found to block");
+  }
+
+  //check not him self
+  if (userIdToBlock.toString() === userBlocking.toString()) {
+    throw new Error("cannot block yourself");
+  }
+
+  const currentUser = await User.findById(userBlocking);
+  //check if the user is blocked
+  if (currentUser?.blockedUsers?.includes(userIdToBlock)) {
+    throw new Error("User alrready blocked");
+  }
+
+  //push user to be blocked
+
+  currentUser?.blockedUsers.push(userIdToBlock);
+
+  await currentUser.save();
+  res.json({
+    status: "success",
+    message: "blocked successfully",
+  });
+});
