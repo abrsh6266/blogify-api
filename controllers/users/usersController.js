@@ -105,3 +105,28 @@ exports.blockUser = asyncHandler(async (re1q, res) => {
     message: "blocked successfully",
   });
 });
+
+//unblock user
+
+exports.unblockUser = asyncHandler(async (req, res) => {
+  const unblockedUserId = req.params.unblockedUserId;
+  //finding unblocked user
+
+  const unblockedUser = await User.findById(unblockedUserId);
+  if (!unblockedUser) {
+    throw new Error("User not found");
+  }
+  const currentUser = await User.findById(req?.user?._id);
+  if (!currentUser.blockedUsers.includes(unblockedUserId)) {
+    throw new Error("user not blocked");
+  }
+  currentUser.blockedUsers = currentUser.blockedUsers.filter(
+    (id) => id.toString() !== unblockedUserId.toString()
+  );
+  //save
+  await currentUser.save();
+  res.json({
+    status: "success",
+    message: "User successfully unblocked",
+  });
+});
