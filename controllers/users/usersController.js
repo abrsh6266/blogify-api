@@ -161,7 +161,7 @@ exports.ProfileViewers = asyncHandler(async (req, res) => {
 
 exports.followingUser = asyncHandler(async (req, res) => {
   //Find the current user
-  const currentUserId = req.userAuth._id;
+  const currentUserId = req.user._id;
   //! Find the user to follow
   const userToFollowId = req.params.userToFollowId;
   //Avoid user following himself
@@ -197,7 +197,7 @@ exports.followingUser = asyncHandler(async (req, res) => {
 
 exports.unFollowingUser = asyncHandler(async (req, res) => {
   //Find the current user
-  const currentUserId = req.userAuth._id;
+  const currentUserId = req.user._id;
   //! Find the user to unfollow
   const userToUnFollowId = req.params.userToUnFollowId;
 
