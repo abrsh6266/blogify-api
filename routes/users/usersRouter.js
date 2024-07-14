@@ -6,6 +6,7 @@ const {
   blockUser,
   unblockUser,
   ProfileViewers,
+  followingUser,
 } = require("../../controllers/users/usersController");
 const isLoggedIn = require("../../middlewares/isLogged");
 
@@ -17,5 +18,6 @@ usersRouter.get("/profile", isLoggedIn, getProfile);
 usersRouter.get("/block/:userIdToBlock", isLoggedIn, blockUser);
 usersRouter.get("/unblock/:unblockedUserId", isLoggedIn, unblockUser);
 usersRouter.get("/view/:userProfileId", isLoggedIn, ProfileViewers);
+usersRouter.get("/following/:userToFollowId", isLoggedIn, followingUser);
 
 module.exports = usersRouter;
