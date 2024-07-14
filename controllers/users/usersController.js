@@ -75,29 +75,29 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
 
 //block user
 
-exports.blockUser = asyncHandler(async (re1q, res) => {
-  const userIdToBlock = req.params.userIdToBlock;
-  const userBlocking = req.user?.id;
+exports.blockUser = asyncHandler(async (req, res) => {
+  const userProfileId = req.params.userProfileId;
+  const userId = req.user?.id;
 
-  const userToBlock = await User.findById(userIdToBlock);
-  if (!userToBlock) {
+  const userProfile = await User.findById(userProfileId);
+  if (!userProfile) {
     throw new Error("User not found to block");
   }
 
   //check not him self
-  if (userIdToBlock.toString() === userBlocking.toString()) {
+  if (userProfileId.toString() === userId.toString()) {
     throw new Error("cannot block yourself");
   }
 
-  const currentUser = await User.findById(userBlocking);
+  const currentUser = await User.findById(userId);
   //check if the user is blocked
-  if (currentUser?.blockedUsers?.includes(userIdToBlock)) {
+  if (currentUser?.blockedUsers?.includes(userProfileId)) {
     throw new Error("User alrready blocked");
   }
 
   //push user to be blocked
 
-  currentUser?.blockedUsers.push(userIdToBlock);
+  currentUser?.blockedUsers.push(userProfileId);
 
   await currentUser.save();
   res.json({
@@ -128,5 +128,33 @@ exports.unblockUser = asyncHandler(async (req, res) => {
   res.json({
     status: "success",
     message: "User successfully unblocked",
+  });
+});
+
+//user profile viewer
+
+exports.ProfileViewers = asyncHandler(async (req, res) => {
+  const userProfileId = req.params.userProfileId;
+  const userId = req.user?.id;
+
+  const userProfile = await User.findById(userProfileId);
+  if (!userProfile) {
+    throw new Error("User not found to view");
+  }
+
+  const currentUser = await User.findById(userId);
+  //check if the user is blocked
+  if (userProfile?.profileViewers?.includes(userId)) {
+    throw new Error("User alrready viewed");
+  }
+
+  //push user to be blocked
+
+  userProfile?.profileViewers.push(userProfileId);
+
+  await userProfile.save();
+  res.json({
+    status: "success",
+    message: "viewed successfully",
   });
 });
