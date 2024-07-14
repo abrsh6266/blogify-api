@@ -7,6 +7,7 @@ const {
   unblockUser,
   ProfileViewers,
   followingUser,
+  unFollowingUser,
 } = require("../../controllers/users/usersController");
 const isLoggedIn = require("../../middlewares/isLogged");
 
@@ -15,9 +16,10 @@ const usersRouter = express.Router();
 usersRouter.post("/register", register);
 usersRouter.post("/login", login);
 usersRouter.get("/profile", isLoggedIn, getProfile);
-usersRouter.get("/block/:userIdToBlock", isLoggedIn, blockUser);
-usersRouter.get("/unblock/:unblockedUserId", isLoggedIn, unblockUser);
+usersRouter.put("/block/:userIdToBlock", isLoggedIn, blockUser);
+usersRouter.put("/unblock/:unblockedUserId", isLoggedIn, unblockUser);
 usersRouter.get("/view/:userProfileId", isLoggedIn, ProfileViewers);
-usersRouter.get("/following/:userToFollowId", isLoggedIn, followingUser);
+usersRouter.put("/following/:userToFollowId", isLoggedIn, followingUser);
+usersRouter.put("/unfollowing/:userToFollowId", isLoggedIn, unFollowingUser);
 
 module.exports = usersRouter;

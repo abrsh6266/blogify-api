@@ -194,3 +194,40 @@ exports.followingUser = asyncHandler(async (req, res) => {
     message: "You have followed the user successfully",
   });
 });
+
+exports.unFollowingUser = asyncHandler(async (req, res) => {
+  //Find the current user
+  const currentUserId = req.userAuth._id;
+  //! Find the user to unfollow
+  const userToUnFollowId = req.params.userToUnFollowId;
+
+  //Avoid user unfollowing himself
+  if (currentUserId.toString() === userToUnFollowId.toString()) {
+    throw new Error("You cannot unfollow yourself");
+  }
+  //Remove the usertoUnffolowID from the current user following field
+  await User.findByIdAndUpdate(
+    currentUserId,
+    {
+      $pull: { following: userToUnFollowId },
+    },
+    {
+      new: true,
+    }
+  );
+  //Remove the currentUserId from the user to unfollow followers field
+  await User.findByIdAndUpdate(
+    userToUnFollowId,
+    {
+      $pull: { followers: currentUserId },
+    },
+    {
+      new: true,
+    }
+  );
+  //send the response
+  res.json({
+    status: "success",
+    message: "You have unfollowed the user successfully",
+  });
+});
