@@ -319,5 +319,5 @@ exports.verifyAccount = expressAsyncHandler(async (req, res) => {
   userFound.accountVerificationToken = undefined;
   //resave the user
   await userFound.save();
-  res.status(200).json({ message: "Account  successfully verified" });
+  res.status(200).json({ message: "Account successfully verified" });
 });
