@@ -5,6 +5,7 @@ const generateToken = require("../../utils/generateToken");
 const asyncHandler = require("express-async-handler");
 const expressAsyncHandler = require("express-async-handler");
 const sendEmail = require("../../utils/sendEmail");
+const sendAccVerificationEmail = require("../../utils/sendAccountVerificationEmail");
 
 exports.register = asyncHandler(async (req, res) => {
   const { username, password, email } = req.body;
@@ -277,4 +278,46 @@ exports.resetPassword = expressAsyncHandler(async (req, res) => {
   //resave the user
   await userFound.save();
   res.status(200).json({ message: "Password reset successfully" });
+});
+
+exports.accountVerificationEmail = expressAsyncHandler(async (req, res) => {
+  //Find the login user email
+  const user = await User.findById(req?.user?._id);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  //send the token
+  const token = await user.generateAccVerificationToken();
+  //resave
+  await user.save();
+  //send the email
+  sendAccVerificationEmail(user?.email, token);
+  res.status(200).json({
+    message: `Account verification email sent ${user?.email}`,
+  });
+});
+
+exports.verifyAccount = expressAsyncHandler(async (req, res) => {
+  //Get the id/token params
+  const { verifyToken } = req.params;
+  //Convert the token to actual token that has been saved in the db
+  const cryptoToken = crypto
+    .createHash("sha256")
+    .update(verifyToken)
+    .digest("hex");
+  //find the user by the crypto token
+  const userFound = await User.findOne({
+    accountVerificationToken: cryptoToken,
+    accountVerificationExpires: { $gt: Date.now() },
+  });
+  if (!userFound) {
+    throw new Error("Account verification  token is invalid or has expired");
+  }
+  //Update user account
+  userFound.isVerified = true;
+  userFound.accountVerificationExpires = undefined;
+  userFound.accountVerificationToken = undefined;
+  //resave the user
+  await userFound.save();
+  res.status(200).json({ message: "Account  successfully verified" });
 });
