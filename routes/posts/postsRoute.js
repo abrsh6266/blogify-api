@@ -7,6 +7,8 @@ const {
   deletePost,
   likePost,
   disLikePost,
+  claps,
+  schedule,
 } = require("../../controllers/posts/postsController");
 const isLoggedIn = require("../../middlewares/isLogged");
 const checkAccountVerification = require("../../middlewares/isAccountVerified");
@@ -26,5 +28,7 @@ postRouter.put("/:id", isLoggedIn, updatePost);
 
 postRouter.put("/likes/:id", isLoggedIn, likePost);
 postRouter.put("/dislikes/:id", isLoggedIn, disLikePost);
+postRouter.put("/claps/:id", isLoggedIn, claps);
+postRouter.put("/schedule/:postId", isLoggedIn, schedule);
 
 module.exports = postRouter;
