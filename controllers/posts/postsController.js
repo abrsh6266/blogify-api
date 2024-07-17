@@ -5,7 +5,7 @@ const User = require("../../model/User/User");
 const expressAsyncHandler = require("express-async-handler");
 
 exports.createPost = asyncHandler(async (req, res) => {
-  //! Find the user/check if user account is verified
+  //! Find the user/chec if user account is verified
   const userFound = await User.findById(req.user._id);
   if (!userFound) {
     throw new Error("User Not found");
@@ -14,7 +14,7 @@ exports.createPost = asyncHandler(async (req, res) => {
   //   throw new Error("Action denied, your account is not verified");
   // }
   //Get the payload
-  const { title, content, categoryId, image } = req.body;
+  const { title, content, categoryId } = req.body;
   //chech if post exists
   const postFound = await Post.findOne({ title });
   if (postFound) {
@@ -26,7 +26,7 @@ exports.createPost = asyncHandler(async (req, res) => {
     content,
     category: categoryId,
     author: req?.user?._id,
-    image,
+    image: req?.file?.path,
   });
   //!Associate post to user
   await User.findByIdAndUpdate(
@@ -211,7 +211,7 @@ exports.likePost = expressAsyncHandler(async (req, res) => {
   //Get the id of the post
   const { id } = req.params;
   //get the login user
-  const userId = req.userAuth._id;
+  const userId = req.user._id;
   //Find the post
   const post = await Post.findById(id);
   if (!post) {
@@ -243,7 +243,7 @@ exports.disLikePost = expressAsyncHandler(async (req, res) => {
   //Get the id of the post
   const { id } = req.params;
   //get the login user
-  const userId = req.userAuth._id;
+  const userId = req.user._id;
   //Find the post
   const post = await Post.findById(id);
   if (!post) {

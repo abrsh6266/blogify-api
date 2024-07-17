@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require("multer");
+const storage = require("../../utils/fileUpload");
 const {
   register,
   login,
@@ -12,8 +14,10 @@ const {
   resetPassword,
   accountVerificationEmail,
   verifyAccount,
+  uploadeProfilePicture,
 } = require("../../controllers/users/usersController");
 const isLoggedIn = require("../../middlewares/isLogged");
+const upload = multer({ storage });
 
 const usersRouter = express.Router();
 
@@ -32,6 +36,15 @@ usersRouter.get(
   isLoggedIn,
   accountVerificationEmail
 );
-usersRouter.get("/account-verification/:verifyToken", isLoggedIn, verifyAccount);
-
+usersRouter.get(
+  "/account-verification/:verifyToken",
+  isLoggedIn,
+  verifyAccount
+);
+usersRouter.put(
+  "/upload-profile-image",
+  isLoggedIn,
+  upload.single("file"),
+  uploadeProfilePicture
+);
 module.exports = usersRouter;
