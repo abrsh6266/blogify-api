@@ -34,5 +34,5 @@ const server = http.createServer(app);
 
 // Starting server
 
-const PORT = process.env.PORT || 9080;
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, console.log("Listening port: ", PORT));
