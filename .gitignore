@@ -61,3 +61,4 @@ package-lock.json
 
 .vscode
 erd.svg
+.vercel
