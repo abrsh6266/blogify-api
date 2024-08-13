@@ -10,6 +10,7 @@ const categoryRouter = require("./routes/categories/categoriesRoutes");
 const postRouter = require("./routes/posts/postsRoute");
 const commentRouter = require("./routes/comments/commentsRoute");
 const sendEmail = require("./utils/sendEmail");
+const cors = require("cors");
 
 //server
 const app = express();
@@ -17,6 +18,9 @@ const app = express();
 //middlewares
 app.use(express.json()); //pass incoming data
 
+//cors middleware
+
+app.use(cors());
 //db connect
 connectDB();
 
