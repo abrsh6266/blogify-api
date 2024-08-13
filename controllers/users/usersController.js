@@ -55,7 +55,7 @@ exports.login = asyncHandler(async (req, res) => {
   user.lastLogin = new Date();
 
   res.status(200).json({
-    status: "failed",
+    status: "success",
     message: "logged in successfully",
     user: {
       id: user._id,
