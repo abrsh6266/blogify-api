@@ -5,7 +5,7 @@ const User = require("../../model/User/User");
 const expressAsyncHandler = require("express-async-handler");
 
 exports.createPost = asyncHandler(async (req, res) => {
-  //! Find the user/chec if user account is verified
+  //! Find the user/check if user account is verified
   const userFound = await User.findById(req.user._id);
   if (!userFound) {
     throw new Error("User Not found");
@@ -15,10 +15,10 @@ exports.createPost = asyncHandler(async (req, res) => {
   // }
   //Get the payload
   const { title, content, categoryId } = req.body;
-  //chech if post exists
+  //check if post exists
   const postFound = await Post.findOne({ title });
   if (postFound) {
-    throw new Error("Post aleady exists");
+    throw new Error("Post already exists");
   }
   //Create post
   const post = await Post.create({
