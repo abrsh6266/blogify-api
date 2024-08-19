@@ -10,6 +10,7 @@ const {
   disLikePost,
   claps,
   schedule,
+  getPublicPosts,
 } = require("../../controllers/posts/postsController");
 const isLoggedIn = require("../../middlewares/isLogged");
 const checkAccountVerification = require("../../middlewares/isAccountVerified");
@@ -21,7 +22,9 @@ const postRouter = express.Router();
 //create
 postRouter.post("/", isLoggedIn, upload.single("file"), createPost);
 //? all
-postRouter.get("/", getPosts);
+postRouter.get("/", isLoggedIn, getPosts);
+//get only 4 posts
+postRouter.get("/public", getPublicPosts);
 //? single
 postRouter.get("/:id", getPost);
 //! delete
