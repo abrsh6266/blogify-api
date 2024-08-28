@@ -72,7 +72,6 @@ exports.getPosts = asyncHandler(async (req, res) => {
   //query
   let query = {
     author:loggedInUserId,
-    author: { $nin: blockingUsersIds },
     $or: [
       {
         shedduledPublished: { $lte: currentTime },
