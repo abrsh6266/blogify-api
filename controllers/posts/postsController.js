@@ -71,6 +71,7 @@ exports.getPosts = asyncHandler(async (req, res) => {
   const searchTerm = req.query.searchTerm;
   //query
   let query = {
+    author:loggedInUserId,
     author: { $nin: blockingUsersIds },
     $or: [
       {
@@ -94,7 +95,7 @@ exports.getPosts = asyncHandler(async (req, res) => {
   const endIndex = page * limit;
   const total = await Post.countDocuments(query);
 
-  const posts = await Post.find(query)
+  const posts = await Post.find()
     .populate({
       path: "author",
       model: "User",
